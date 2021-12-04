@@ -52,4 +52,8 @@ def save_model(filename, decoder):
 
 def load_model(filename):
     save_filename = os.path.splitext(os.path.basename(filename))[0] + '.pt'
-    return torch.load(save_filename)
+    if torch.cuda.is_available():
+        map_location=lambda stor_loc: stor_loc[0].cuda()
+    else:
+        map_location='cpu'
+    return torch.load(save_filename, map_location=map_location)
